@@ -4,7 +4,7 @@ Ivan's collection of agent skills.
 
 ## Available Skills
 
-- **[webapp-manual](skills/webapp-manual/)** — Build and maintain a web system's operation manual (操作說明書 / 操作手冊 / user guide) as a `.docx`, kept true to the running app: verify pages against the live SPA (JWT-into-`localStorage`, no Playwright MCP needed), capture and annotate screenshots, and edit the OOXML directly — sections, field-spec tables, and the Table of Contents.
+- **[webapp-manual](skills/webapp-manual/)** — Build a web system's operation manual (操作說明書 / 操作手冊 / user guide) as a `.docx` from scratch — enumerating the nav bar into a table of contents — or maintain an existing one, kept true to the running app: verify pages against the live SPA (the sign-in method is read from source, not assumed), capture and annotate screenshots, and edit the OOXML directly — sections, field-spec tables, and the Table of Contents. Needs browser automation for capture — a Playwright MCP, or Node + the `playwright` package.
 
 ## Installation
 

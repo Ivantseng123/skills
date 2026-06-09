@@ -2,8 +2,15 @@
 
 How to log into a deployed single-page app and confirm what it actually renders,
 when there is no Playwright MCP server available. Everything here was learned
-against a Gridsome + Vuetify SPA, but the techniques generalise to most
-token-in-`localStorage` SPAs.
+against a Gridsome + Vuetify SPA, but the techniques generalise to most SPAs that
+authenticate with a form login or a token in `localStorage`.
+
+> **Have a Playwright MCP instead?** Run these same steps through it — the
+> source-grounding (§1) and the auth-method analysis (§2) apply unchanged; you
+> just issue navigate / screenshot via the MCP's tools rather than the bundled
+> script. One catch: token-into-`localStorage` injection (Method B) needs an MCP
+> that can run an init script *before* page load; form login (Method A) works on
+> any. The rest of this file is the no-MCP path.
 
 ## 1. Find the ground truth in source *before* you click
 
@@ -25,13 +32,45 @@ checked-out branch) — `main` may have drifted.
 `zsh` glob trap: `grep -r --include=*.vue pattern src/` fails on zsh because the
 unquoted glob expands. Quote it (`--include='*.vue'`) or just `grep -rn pattern src/`.
 
-## 2. Inject a JWT into localStorage to authenticate
+## 2. Establish access — determine the auth method first
 
-Many internal SPAs keep the auth token in `localStorage` and attach it via an
-HTTP interceptor; crucially, several have **no router guard** (the auth check in
-`main.js` is commented out), so a 401/403 only pops an error toast — it does not
-redirect. That means: set the right `localStorage` keys before any page script
-runs, then deep-link straight to any route and it renders.
+Don't reach for one technique by reflex. First read the source to learn *how* the
+app authenticates, then pick the method (and confirm it with the user):
+
+- **Is there a login form?** A `/login` route with username/password fields means
+  you can do a real form login — preferred (Method A).
+- **Is there a router guard?** Often the auth check in `main.js` is commented out,
+  so a 401/403 only pops an error toast and never redirects — that is exactly what
+  makes token injection (Method B) viable.
+- **Where does the session live?** `localStorage`, a cookie, or `sessionStorage`?
+  Is it a JWT the HTTP interceptor reads, or an opaque server session? A JWT in
+  `localStorage` can be injected; an httpOnly cookie or an SSO redirect cannot
+  (see "Methods not covered").
+
+### Method A — real form login (preferred when you have credentials)
+
+If you have an account, logging in through the form is the most robust path — the
+app writes its own *complete, correct* session itself, so the incomplete-session
+trap in Method B simply can't happen. `capture_pages.js` supports a `login` block
+(route + username/password + selectors) that fills the form and submits before
+capturing; prefer it over `auth` when credentials are available.
+
+Two traps learned the hard way:
+- **Don't name credential env vars after system vars.** `${USERNAME}` collided
+  with the shell's own `USERNAME` (set to the OS login name), so the script
+  logged in as the OS user instead of the intended account, failed, and
+  screenshotted the login page. Use app-specific names like `${APP_USER}` /
+  `${APP_PASS}`.
+- **Confirm the post-login URL.** The script logs `logged in as <user> -> <url>`.
+  If that URL still ends in `/login`, the login failed (wrong creds, wrong
+  selector, wrong env var) and every capture will be the login screen. Check it
+  before trusting the screenshots — a failed login fails *silently* otherwise.
+
+### Method B — inject a token into localStorage (fallback)
+
+When you only hold a token (no account, or the login flow is awkward) and the app
+keeps its auth token in `localStorage` with **no router guard**, set the keys
+before any page script runs, then deep-link straight to any route and it renders.
 
 Use `context.addInitScript` (runs before page scripts) to set the keys the app's
 `authUtils`-style module reads. The common shape:
@@ -68,25 +107,12 @@ Storage, and copy *every* key. The two that bite:
 **Keep the token in an env var.** It is a live credential. Do not write it into
 the config, a script, or anything that could be committed.
 
-### Better: real form login (when you have credentials)
+### Methods not covered
 
-JWT injection is reverse-engineering the app's session. If you have an account,
-**logging in through the form is more robust** — the app writes the *complete,
-correct* session to `localStorage` itself, so the incomplete-session logout trap
-above simply can't happen. `capture_pages.js` supports a `login` block (route +
-username/password + selectors) that fills the form and submits before capturing;
-prefer it over `auth` when credentials are available.
-
-Two traps learned the hard way:
-- **Don't name credential env vars after system vars.** `${USERNAME}` collided
-  with the shell's own `USERNAME` (set to the OS login name), so the script
-  logged in as the OS user instead of the intended account, failed, and
-  screenshotted the login page. Use app-specific names like `${APP_USER}` /
-  `${APP_PASS}`.
-- **Confirm the post-login URL.** The script logs `logged in as <user> -> <url>`.
-  If that URL still ends in `/login`, the login failed (wrong creds, wrong
-  selector, wrong env var) and every capture will be the login screen. Check it
-  before trusting the screenshots — a failed login fails *silently* otherwise.
+If the session is an **httpOnly cookie** the page JS can't set, or auth goes
+through an **SSO / OAuth redirect**, neither built-in mode applies. Tell the user;
+the options are exporting a cookie into the browser context by hand, or driving
+the real SSO login interactively — decide together rather than guessing.
 
 ## 3. Drive pages reliably
 
