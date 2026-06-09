@@ -28,14 +28,17 @@ codex plugin add skills@ivantseng123-skills
 
 Restart Codex (or open a new thread) after installing.
 
-### Cursor, Copilot & other agents
+### OpenCode, Cursor, Copilot & other agents
 
 The cross-agent [`skills`](https://skills.sh) CLI installs the SKILL.md skills into whichever agent you target — it reads this public repo directly, no marketplace registration needed:
 
 ```bash
+npx skills add Ivantseng123/skills -a opencode   # OpenCode
 npx skills add Ivantseng123/skills -a cursor     # Cursor (or -a windsurf, -a cline, …)
 npx skills add Ivantseng123/skills -g            # every detected agent, globally
 ```
+
+OpenCode discovers skills in `~/.agents/skills/`, `~/.claude/skills/`, and `~/.config/opencode/skills/` (plus project-local `.opencode/skills/`, `.claude/skills/`, `.agents/skills/`) — so a skill already installed for Claude Code or Codex shows up in OpenCode automatically.
 
 `npx skills add --help` lists the supported agents (70+).
 
