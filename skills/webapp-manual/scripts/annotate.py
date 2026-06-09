@@ -7,6 +7,11 @@ and the deviceScaleFactor). Screenshots are at deviceScaleFactor resolution, so
 every boundingBox must be multiplied by it before drawing — that off-by-2x is
 the classic mistake.
 
+meta.json is OPTIONAL. Without it (hand-provided screenshots, or shots from a
+custom Playwright probe rather than capture_pages.js), annotate runs in crop-only
+mode — and you can still draw boxes by giving explicit pixel rects in a page's
+"annotate.boxesPx" ([x, y, w, h], in screenshot pixels, drawn as-is).
+
 Per page, the config's "annotate" block says which recorded boxes to outline and
 where to crop:
 
@@ -15,7 +20,8 @@ where to crop:
       "name": "info_list",
       ...capture fields...,
       "annotate": {
-        "highlight": ["filter", "add"],   // box names from this page's "boxes"
+        "highlight": ["filter", "add"],   // box names from this page's "boxes" (needs capture meta.json)
+        "boxesPx": [[40, 60, 300, 48]],   // OR explicit [x,y,w,h] screenshot-pixel boxes (no meta needed)
         "crop": [0, 0, null, 1040]        // [left, top, right, bottom]; null = image edge
       }
     }
@@ -68,7 +74,14 @@ def main():
         preview_path = sys.argv[sys.argv.index("--preview") + 1]
     os.makedirs(out_dir, exist_ok=True)
 
-    meta = json.load(open(os.path.join(cap_dir, "meta.json"), encoding="utf-8"))
+    meta_path = os.path.join(cap_dir, "meta.json")
+    if os.path.exists(meta_path):
+        meta = json.load(open(meta_path, encoding="utf-8"))
+    else:
+        # Hand-provided screenshots have no capture meta. Crop-only; boxes come
+        # from each page's explicit "annotate.boxesPx" instead of recorded ones.
+        meta = {"deviceScaleFactor": cfg.get("deviceScaleFactor", 1), "pages": {}}
+        print("no meta.json — crop-only mode (highlight needs recorded boxes; use boxesPx for manual boxes)")
     scale = meta.get("deviceScaleFactor", 2)
 
     produced = []
@@ -88,6 +101,11 @@ def main():
                 print(f"  {name}: box '{box_name}' had no boundingBox (selector missed?) — skipping")
                 continue
             draw_box(d, b, scale, pad=ann.get("pad", 10), width=ann.get("width", 6))
+        # Explicit pixel boxes [x, y, w, h] in SCREENSHOT pixels — for hand-provided
+        # shots with no recorded boundingBox. Drawn as-is (scale already baked in).
+        for x, y, w, h in ann.get("boxesPx", []):
+            draw_box(d, {"x": x, "y": y, "width": w, "height": h}, 1,
+                     pad=ann.get("pad", 10), width=ann.get("width", 6))
         im = crop_box(im, ann.get("crop"))
         dst = os.path.join(out_dir, name + ".png")
         im.save(dst)

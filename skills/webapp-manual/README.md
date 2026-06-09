@@ -42,8 +42,11 @@ See [`SKILL.md`](SKILL.md) for the full runtime workflow, `references/` for the 
 ## Installation
 
 ```bash
-npx skills add Ivantseng123/skills --skill webapp-manual -g
+npx skills add Ivantseng123/skills --skill webapp-manual -a codex   # Codex (or -a cursor, …)
+npx skills add Ivantseng123/skills --skill webapp-manual -g         # every detected agent
 ```
+
+In Claude Code you can also: `/plugin marketplace add Ivantseng123/skills`
 
 ## License
 

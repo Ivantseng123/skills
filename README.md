@@ -17,11 +17,17 @@ Everything ships as a single plugin — install once and all skills above are av
 /plugin install skills@ivantseng123-skills
 ```
 
-### Skills CLI
+### Codex, Cursor, and other agents
+
+The cross-agent [`skills`](https://skills.sh) CLI installs the SKILL.md skills into whichever agent you target — it reads this public repo directly, no marketplace registration needed:
 
 ```bash
-npx skills add Ivantseng123/skills -g
+npx skills add Ivantseng123/skills -a codex      # OpenAI Codex
+npx skills add Ivantseng123/skills -a cursor     # Cursor
+npx skills add Ivantseng123/skills -g            # every detected agent, globally
 ```
+
+`npx skills add --help` lists the supported agents (70+).
 
 ## License
 

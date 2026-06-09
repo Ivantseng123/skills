@@ -56,6 +56,10 @@
  *       "waitMs": 3000,                                // optional extra settle time after networkidle
  *       "navExpand": "同險管理",                        // optional: text of a collapsed nav group to click open
  *       "clicks": ["text=篩選", "button:has-text(\"新增\")"],  // optional pre-actions, each clicked in order
+ *       "clickWaitMs": 900,                              // optional: wait after EACH click (default 900)
+ *       "afterClickWaitMs": 4000,                        // optional: extra wait after a NAVIGATING click,
+ *                                                        // on top of the automatic networkidle settle —
+ *                                                        // use when a click opens a detail route that loads data
  *       "boxes": {                                     // selectors whose boundingBox to record (for annotation)
  *         "filter": ".v-expansion-panel",
  *         "add": "button:has-text(\"新增\")",
@@ -186,7 +190,16 @@ async function bbox(page, selector) {
     for (const sel of (p.clicks || [])) {
       const loc = page.locator(sel).first();
       if (await loc.count()) await loc.click({ timeout: 5000 }).catch(() => {});
-      await page.waitForTimeout(900);
+      await page.waitForTimeout(p.clickWaitMs || 900);
+    }
+    // A click can NAVIGATE (open a detail route / push a new page), not just open
+    // a dialog. The per-click wait above is enough to expand a panel but not to
+    // load a fresh route, so the screenshot would catch a half-loaded page. When
+    // any clicks ran, let the destination settle — wait for networkidle, then an
+    // optional extra beat for SPA data to land.
+    if ((p.clicks || []).length) {
+      await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+      if (p.afterClickWaitMs) await page.waitForTimeout(p.afterClickWaitMs);
     }
     // record boundingBoxes for annotation
     const boxes = {};
