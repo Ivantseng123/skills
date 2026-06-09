@@ -1,0 +1,26 @@
+{
+  "name": "ivantseng123-skills",
+  "owner": {
+    "name": "Ivan Tseng"
+  },
+  "metadata": {
+    "description": "Ivan's collection of agent skills",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "skills",
+      "description": "Ivan's collection of agent skills — webapp-manual",
+      "version": "0.1.0",
+      "source": "./",
+      "keywords": [
+        "skills",
+        "agent-skills",
+        "webapp-manual",
+        "docx",
+        "operation-manual",
+        "documentation"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@ivantseng123/skills",
+  "version": "0.1.0",
+  "description": "Ivan's collection of agent skills",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ivantseng123/skills"
+  },
+  "keywords": [
+    "ai-agent",
+    "agent-skills",
+    "coding-assistant"
+  ],
+  "author": "Ivantseng123",
+  "license": "MIT",
+  "homepage": "https://github.com/Ivantseng123/skills#readme",
+  "bugs": {
+    "url": "https://github.com/Ivantseng123/skills/issues"
+  }
+}
