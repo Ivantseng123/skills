@@ -43,7 +43,9 @@ not discovered mid-write.
 `assets/manual-template.docx` is a clean shell — heading styles, the 標楷體
 `eastAsia` font runs, a working TOC field, and **one** example chapter in the
 canonical section shape. It exists so you never hand-build OOXML styles and a TOC
-field from nothing (fiddly and easy to get subtly wrong).
+field from nothing (fiddly and easy to get subtly wrong). **Don't bypass it by
+hand-rolling the `.docx` straight from python-docx** — that is how the TOC field
+gets dropped and you hand back a manual with no 目錄.
 
 - Copy it to your working path and set the document title / cover line.
 - The example chapter is your pattern: duplicate its paragraph structure per real

@@ -83,6 +83,15 @@ The raw `.docx` unpack → edit XML → repack mechanics are handled by the
   stale dropdown list also appears in chapter 6, **report it, don't silently
   fix it** — a value that occurs in two chapters and a blind replace-all is how
   you edit the thing you weren't asked to touch.
+- **A manual is TOC-ready or it isn't done.** The 目錄 (Table of Contents) is a
+  Word *field* generated from the heading styles — structural, not optional
+  decoration. Build a standalone `.docx` from `assets/manual-template.docx`, which
+  already carries a working TOC field set to update-on-open, rather than
+  hand-rolling bare chapters straight from python-docx — that is exactly how a TOC
+  silently goes missing. A single chapter still carries its own heading styles so a
+  parent manual's TOC catches it; deliver it standalone and you keep the template's
+  TOC field. Don't hand a manual back without its 目錄 unless the user explicitly
+  asked for a bare fragment.
 - **Verify, but know your limits.** With no LibreOffice you cannot render the
   .docx to confirm layout visually. Do thorough *structural* verification (pack
   validation, grep that new relationships resolve, old ones are gone, scope-
