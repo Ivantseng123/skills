@@ -165,6 +165,12 @@ text of the rule cell. This is where outdated facts hide — e.g. a 險群 dropd
 documented with 12 options when the live `selectMenu.js` now exports 9. Fix the
 text to match source, in display order.
 
+**The 輸入規則 column is backend-authoritative.** The frontend usually does only
+soft UI validation; the real required / length / format rules live in the backend's
+DTO / validator annotations, and options served from an API (not a frontend list)
+only exist there. When the rule matters, ground it in the backend source — the
+frontend gives you the field's label and whether it shows, not its true constraint.
+
 ## The two traps
 
 **Duplicate-string trap.** The same value often appears in several chapters (the

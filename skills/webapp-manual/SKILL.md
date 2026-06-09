@@ -46,11 +46,15 @@ tells you *what* to put in the XML and *how to be sure it's correct*.
 
 ## Golden rules (read before touching anything)
 
-- **Ground every claim.** A dropdown's options, a field's validation, a menu's
-  routes — never transcribe from memory or the old manual. Read the live app or,
-  better, the frontend source (`selectMenu.js` option lists, the page's `v-if`
-  conditions). The old manual is a *suspect*. The highest-value edits this workflow
-  produces are usually **fixing outdated facts the old manual got wrong**.
+- **Ground every claim — in the right source.** Never transcribe from memory or the
+  old manual (it's a *suspect*). The **frontend** is authoritative for the UI
+  surface: menu / routes, field labels, conditional display (`v-if`), and
+  frontend-hardcoded dropdown options (`selectMenu.js`-style). The **backend** is
+  authoritative for what the UI can't prove: a field's real input rules (required /
+  length / format — in DTO/validator annotations, not the UI's soft checks), options
+  served from an API or DB enum, and the business logic a function actually runs. The
+  欄位規格表's input-rule column is where the backend matters most. The highest-value
+  edits are usually **fixing outdated facts the old manual got wrong**.
 - **Never hardcode secrets.** The session token, credentials, internal URL, and
   client name are not yours to bake into a script or commit. Tokens/passwords come
   from env vars; URLs and client identifiers live in a local untracked config or get
@@ -120,10 +124,13 @@ the loop once per chapter, in nav order. Read the request and pick the arc.
    first (`ooxml-editing.md` § "Finding a section"). Building: scope is which slice
    of the nav tree you document this pass.
 
-2. **Verify against the live system.** Find ground truth in the **frontend source**
-   first, not by clicking: the menu/route table, the `selectMenu.js`-style option
-   lists, the page's conditional-field `v-if` logic — a grep settles "what are the
-   dropdown's real values" definitively. Then **establish access without assuming
+2. **Verify against the live system.** Find ground truth in **source** first, not by
+   clicking. The **frontend** gives the menu/route table, the `selectMenu.js`-style
+   option lists, and the page's conditional-field `v-if` logic. The **backend** gives
+   what the frontend can't: a field's authoritative input rules (validator / DTO
+   constraints), options served from an API or DB enum, and the business logic behind
+   a function — read it when the 欄位規格表 or 功能說明 must be precise. Then
+   **establish access without assuming
    the method**: read the source for how it authenticates (login form? router guard?
    token in localStorage / cookie / sessionStorage? JWT or opaque?), then ask the
    user which to use. Form login is preferred (the app writes a complete session);
