@@ -17,13 +17,23 @@ Everything ships as a single plugin — install once and all skills above are av
 /plugin install skills@ivantseng123-skills
 ```
 
-### Codex, Cursor, and other agents
+### Codex Plugin
+
+Codex has the same marketplace flow (the Codex App, or a recent codex CLI — the `codex plugin add` install step isn't in older CLI builds, which only register the marketplace):
+
+```bash
+codex plugin marketplace add Ivantseng123/skills
+codex plugin add skills@ivantseng123-skills
+```
+
+Restart Codex (or open a new thread) after installing.
+
+### Cursor, Copilot & other agents
 
 The cross-agent [`skills`](https://skills.sh) CLI installs the SKILL.md skills into whichever agent you target — it reads this public repo directly, no marketplace registration needed:
 
 ```bash
-npx skills add Ivantseng123/skills -a codex      # OpenAI Codex
-npx skills add Ivantseng123/skills -a cursor     # Cursor
+npx skills add Ivantseng123/skills -a cursor     # Cursor (or -a windsurf, -a cline, …)
 npx skills add Ivantseng123/skills -g            # every detected agent, globally
 ```
 

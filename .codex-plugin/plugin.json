@@ -1,0 +1,20 @@
+{
+  "name": "skills",
+  "description": "Ivan's collection of agent skills, packaged as a Codex plugin.",
+  "version": "0.3.0",
+  "author": {
+    "name": "Ivan Tseng"
+  },
+  "homepage": "https://github.com/Ivantseng123/skills",
+  "repository": "https://github.com/Ivantseng123/skills",
+  "license": "MIT",
+  "skills": "./skills",
+  "interface": {
+    "displayName": "Ivan's Skills",
+    "shortDescription": "Build a web system's operation manual (操作說明書) grounded in the live app — and more.",
+    "longDescription": "Ivan's curated agent skills. Currently ships webapp-manual: build or maintain a web system's operation manual (操作說明書 / 操作手冊) as a .docx, grounded in the live running app and its source.",
+    "developerName": "Ivan Tseng",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive", "Read", "Write"]
+  }
+}

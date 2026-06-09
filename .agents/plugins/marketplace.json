@@ -1,0 +1,20 @@
+{
+  "name": "ivantseng123-skills",
+  "interface": {
+    "displayName": "Ivan's Skills"
+  },
+  "plugins": [
+    {
+      "name": "skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
