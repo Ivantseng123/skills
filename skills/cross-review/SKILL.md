@@ -1,23 +1,19 @@
 ---
 name: cross-review
 description: >-
-  Open a fresh-eyes sub-agent review of a spec, plan, pull request, or any ad-hoc
-  artifact (legacy code, third-party patch, a PR you didn't author). Runs in two
-  modes — anchored on an Uncertainty Manifest when one exists, or open mode (the
-  reviewer derives an implicit Manifest from the artifact itself) when no Manifest
-  is available. Use to challenge assumptions, catch missed cross-source conflicts,
-  and surface failure modes before implementation or merge. Use proactively the
-  moment a spec / plan / PR is drafted — don't wait for the user to ask,
-  especially when a Manifest is written or updated, or before `git push` /
-  `gh pr create`. Exception: S-class changes (≤2 files, ≤20 lines, no business
-  logic — where business logic means code affecting amount / rate / allocation
-  calculations, state transitions, or externally visible behavior) skip the
-  plan-tier auto-trigger; the pre-push pr tier still applies. Tiered policy: spec
-  and plan reviews are advisory; PR reviews block on critical findings. Triggers
-  on /cross-review, review my plan, second opinion on this plan, regression check,
-  fresh eyes, fan-out review, review this PR, review legacy code, ad-hoc review,
-  交叉檢查, 開另一個 session review, 跨 session review, review 這個 PR. Pairs with
-  the uncertainty-manifest skill, but cross-review also works alone in open mode.
+  Open a fresh-eyes sub-agent review of a spec, plan, or pull request (incl. legacy
+  code or a third-party patch). Two modes: anchored on an Uncertainty Manifest when
+  one exists, or open mode (the reviewer derives an implicit Manifest from the
+  artifact) when none is available. Use to challenge assumptions, catch cross-source
+  conflicts, and surface failure modes before implementation or merge. Trigger
+  proactively when a spec / plan / PR is drafted — especially when a Manifest is
+  written or updated, or before `git push` / `gh pr create`. S-class changes (≤2
+  files, ≤20 lines, no business logic) skip the plan tier; the pre-push pr tier
+  still applies. Tiered policy: spec and plan reviews are advisory; PR reviews block
+  on Critical findings. Triggers on /cross-review, review my plan, second opinion,
+  regression check, fresh eyes, review this PR, review legacy code, 交叉檢查, 跨
+  session review, review 這個 PR. Pairs with the uncertainty-manifest skill, and
+  also works alone in open mode.
 license: MIT
 ---
 

@@ -3,22 +3,17 @@ name: uncertainty-manifest
 description: >-
   Force-surface hidden agent assumptions as a structured 4-section Manifest
   (Assumptions / Unknowns / Cross-source conflicts / Domain terms) before any
-  non-trivial implementation. The Manifest's target is **the plan's code-change
-  structure** — which files, which methods, which schema — so it triggers **after
-  the plan phase**, not the spec phase. Spec-stage design discussion stays a plain
-  discussion; the Manifest comes after the plan crystallises into concrete edits.
-  Use proactively at the end of the plan phase, before cross-module or multi-file
-  changes, before business-logic changes — and critically, also for lightweight
-  tasks that skip formal planning (bug fixes, "help me add X", "幫我修這個",
-  "改一下 Y", quick patches). Lightweight tasks are where the agent silently
-  assumes the most; the Manifest is mandatory whether or not a formal planning
-  step ever ran. Especially important in regulated domains (insurance, finance,
-  healthcare, legal). Pairs with the cross-review skill. Triggers on finishing a
-  plan, post-plan implementation, cross-module changes, business-logic changes,
-  bug fixes, quick patches, "幫我加", "幫我改", "幫我修", "改 A 錯 B", regression,
-  "I assume", "I'm not sure", 規劃完成, 不確定, 商業邏輯變更. Does NOT trigger on
-  spec drafting — at spec stage the artifact is still diverging on design, not yet
-  pinned to specific files/methods/schema for the Manifest to anchor on.
+  non-trivial implementation. Its target is the plan's code-change structure —
+  which files, methods, schema — so it triggers after the plan phase, not at spec
+  stage. Use proactively at the end of planning, before cross-module or multi-file
+  changes, before business-logic changes — and critically for lightweight tasks
+  that skip planning (bug fixes, quick patches, "幫我修這個"), where the agent
+  silently assumes the most. Especially important in regulated domains (insurance,
+  finance, healthcare, legal). Pairs with the cross-review skill. Triggers on
+  finishing a plan, post-plan implementation, cross-module changes, business-logic
+  changes, bug fixes, quick patches, 幫我加, 幫我改, 幫我修, 改 A 錯 B, regression,
+  "I assume", 規劃完成, 不確定, 商業邏輯變更. Does NOT trigger on spec drafting —
+  the artifact is still diverging on design, not pinned to specific files/methods.
 license: MIT
 ---
 

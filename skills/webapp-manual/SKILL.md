@@ -1,24 +1,19 @@
 ---
 name: webapp-manual
 description: >-
-  Build a web system's operation manual (操作說明書/操作手冊/user guide) as a .docx
-  from scratch, or maintain an existing one — grounding every page on the live
-  running app and editing the OOXML directly. Use this whenever the user works on
-  an operation-manual / user-guide .docx for a web system: building a brand-new
-  manual (enumerating the nav bar into a table of contents, then documenting each
-  screen with function descriptions, annotated screenshots, and field-spec
-  tables), remaking or adding chapters, refreshing stale screenshots, auditing the
-  table of contents against the real system, or keeping field / dropdown / menu
-  documentation in sync with what the app actually shows. Trigger even when the
-  user only says "build the operation manual from scratch", "list the menu as a
-  TOC and document each page", "update the manual", "remake section X", "compare
-  the TOC against the system", "the screenshots are stale", or "document this new
-  page" — anytime a doc must match a live, authenticated single-page app. Live
-  verification and capture need browser automation — the bundled Playwright
-  script (Node + `playwright`) or a Playwright MCP in the agent.
-  Complements the document-skills:docx skill (which handles raw unpack/edit/pack
-  mechanics) by adding live verification, screenshot annotation, and
-  source-grounded content.
+  Build a web system's operation manual (操作說明書 / 操作手冊 / user guide) as a
+  .docx from scratch, or maintain an existing one — grounding every page on the
+  live running app and editing the OOXML directly. Use for any operation-manual /
+  user-guide .docx for a web system: building a new manual (enumerating the nav bar
+  into a TOC, then documenting each screen with function descriptions, annotated
+  screenshots, and field-spec tables), remaking or adding chapters, refreshing
+  stale screenshots, auditing the TOC against the real system, or keeping field /
+  dropdown / menu docs in sync with the app. Trigger on "build the operation
+  manual", "update the manual", "remake section X", "the screenshots are stale",
+  or "document this new page" — anytime a doc must match a live, authenticated
+  single-page app. Live verification and capture need browser automation (the
+  bundled Playwright script or a Playwright MCP). Complements document-skills:docx
+  by adding live verification, screenshot annotation, and source-grounded content.
 license: MIT
 ---
 
