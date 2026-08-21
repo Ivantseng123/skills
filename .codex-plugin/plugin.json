@@ -1,7 +1,7 @@
 {
   "name": "skills",
   "description": "Ivan's collection of agent skills, packaged as a Codex plugin.",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "author": {
     "name": "Ivan Tseng"
   },
@@ -11,8 +11,8 @@
   "skills": "./skills",
   "interface": {
     "displayName": "Ivan's Skills",
-    "shortDescription": "Build a web system's operation manual (操作說明書) grounded in the live app — and more.",
-    "longDescription": "Ivan's curated agent skills. Currently ships webapp-manual: build or maintain a web system's operation manual (操作說明書 / 操作手冊) as a .docx, grounded in the live running app and its source.",
+    "shortDescription": "Operation manuals grounded in the live app, uncertainty manifests, and fresh-eyes cross-review.",
+    "longDescription": "Ivan's curated agent skills. Ships webapp-manual (build or maintain a web system's operation manual, 操作說明書 / 操作手冊, as a .docx grounded in the live running app), uncertainty-manifest (force hidden assumptions into a structured, confidence-tagged Manifest before implementation), and cross-review (fresh-eyes sub-agent review of specs, plans, and PRs — blocking on Critical findings before push).",
     "developerName": "Ivan Tseng",
     "category": "Developer Tools",
     "capabilities": ["Interactive", "Read", "Write"]

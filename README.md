@@ -5,6 +5,10 @@ Ivan's collection of agent skills.
 ## Available Skills
 
 - **[webapp-manual](skills/webapp-manual/)** — Build a web system's operation manual (操作說明書 / 操作手冊 / user guide) as a `.docx` from scratch — enumerating the nav bar into a table of contents — or maintain an existing one, kept true to the running app: verify pages against the live SPA (the sign-in method is read from source, not assumed), capture and annotate screenshots, and edit the OOXML directly — sections, field-spec tables, and the Table of Contents. Needs browser automation for capture — a Playwright MCP, or Node + the `playwright` package.
+- **[uncertainty-manifest](skills/uncertainty-manifest/)** — Force an agent's hidden assumptions onto the page before it touches production code: a structured 4-section Manifest (Assumptions with data-lineage and cardinality sub-sections, Unknowns, Cross-source conflicts, Domain terms), every claim tagged `VERIFIED` / `CITED` / `INFERRED` / `GUESS` so the downstream review spends its budget where the uncertainty actually is.
+- **[cross-review](skills/cross-review/)** — Hand a spec, plan, or PR to a fresh-eyes sub-agent that never saw your reasoning and let it try to knock the work down. Anchored mode walks an Uncertainty Manifest line by line; open mode derives one from the artifact. Spec and plan reviews are advisory; pre-push PR reviews run a three-lens panel and block on Criticals — and a Critical that can't name a concrete failure scenario is auto-demoted.
+
+`uncertainty-manifest` and `cross-review` pair into a contract-and-court review workflow — the combined manual-invocation guide, including what each Confidence tag makes the reviewer do, is [docs/manifest-cross-review-workflow.md](docs/manifest-cross-review-workflow.md) (Traditional Chinese).
 
 ## Installation
 
