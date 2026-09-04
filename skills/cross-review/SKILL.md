@@ -45,7 +45,7 @@ That set covers most of the "I planned it carefully but it still broke" failure 
 | `cross-review plan` | After a plan is drafted (use automatically; S-class changes exempt — see below) | advisory |
 | `cross-review pr` | Before opening a PR (use automatically) | blocking on critical |
 
-"Automatically" here means: **don't wait to be asked.** When a Manifest is written or updated (i.e., `uncertainty-manifest` writes to `<project-root>/.claude/manifest/<task-slug>.md`), or when `git push` / `gh pr create` is about to run, trigger this skill on your own initiative. The trigger is the artifact event (manifest write, push-imminent), not which upstream skill produced it — this stays consistent across whatever planning flow, plan-mode exit, or implicit-plan path got you here. Nothing fires this for you; "automatic" describes your discipline, not a mechanism.
+"Automatically" here means: **don't wait to be asked.** When a Manifest is written or updated (i.e., `uncertainty-manifest` writes to `<project-root>/docs/manifest/<task-slug>.md`), or when `git push` / `gh pr create` is about to run, trigger this skill on your own initiative. The trigger is the artifact event (manifest write, push-imminent), not which upstream skill produced it — this stays consistent across whatever planning flow, plan-mode exit, or implicit-plan path got you here. Nothing fires this for you; "automatic" describes your discipline, not a mechanism.
 
 **S-class exemption**: when the Manifest belongs to an S-class change (≤2 files, ≤20 lines, no business logic; unsure → treat as M), the manifest-write event does **not** auto-trigger `cross-review plan`. The pre-push `cross-review pr` gate applies unchanged. Sizing definitions, for reference:
 
@@ -62,7 +62,7 @@ That set covers most of the "I planned it carefully but it still broke" failure 
 
 Two modes, depending on whether an active Uncertainty Manifest is available:
 
-**Anchored mode (preferred)** — A Manifest file exists at `<project-root>/.claude/manifest/<task-slug>.md` for this work. The reviewer walks §1–§4 line by line, verifying each cited source and challenging assumptions the author already surfaced. Highest ROI — the author has already done the work of attempting to expose hidden state; the reviewer just has to test it.
+**Anchored mode (preferred)** — A Manifest file exists at `<project-root>/docs/manifest/<task-slug>.md` for this work. The reviewer walks §1–§4 line by line, verifying each cited source and challenging assumptions the author already surfaced. Highest ROI — the author has already done the work of attempting to expose hidden state; the reviewer just has to test it.
 
 **Open mode (fallback)** — No active Manifest. Common cases:
 

@@ -66,7 +66,7 @@ Manifest 有 4 個必要 section(§1–§4),每個至少要有 3 行實質內容
 
 ### 檔案落點
 
-Manifest 存在 `<專案根目錄>/.claude/manifest/<task-slug>.md`,`task-slug` 是自己取的簡短 kebab-case 名稱(例如 `fix-discount-rate`)。同一個任務永遠對應同一個檔案,後續更新是覆寫這個檔案,不是另外開一份。你也可以在檔案開頭的 YAML frontmatter 加一個 `file_globs` 欄位,列出這次異動預期會碰到的檔案路徑——這在沒有機器強制檢查的情況下,單純是給自己(或協作者)看的範圍聲明,寫了對追蹤「這份 Manifest 對應到哪些檔案」還是有幫助。
+Manifest 存在 `<專案根目錄>/docs/manifest/<task-slug>.md`,`task-slug` 是自己取的簡短 kebab-case 名稱(例如 `fix-discount-rate`)。同一個任務永遠對應同一個檔案,後續更新是覆寫這個檔案,不是另外開一份。這個路徑刻意不綁定任何 agent:Manifest 是規劃、實作、審查共用的任務產物,不是 agent 設定,所以不放在 `.claude/`、`.codex/` 之類的工具專屬目錄。要不要把 `docs/manifest/` 進版控由各 repo 自己決定,skill 不會動你的 `.gitignore`。你也可以在檔案開頭的 YAML frontmatter 加一個 `file_globs` 欄位,列出這次異動預期會碰到的檔案路徑——這在沒有機器強制檢查的情況下,單純是給自己(或協作者)看的範圍聲明,寫了對追蹤「這份 Manifest 對應到哪些檔案」還是有幫助。
 
 ## 3. cross-review:各層級什麼時候手動調用、審查火力怎麼分配
 

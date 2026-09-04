@@ -229,7 +229,7 @@ This skill owns the full lifecycle: deciding the slug, creating the file, writin
 Save the Manifest to:
 
 ```
-<project-root>/.claude/manifest/<task-slug>.md
+<project-root>/docs/manifest/<task-slug>.md
 ```
 
 ### Picking the slug
@@ -243,7 +243,7 @@ When this skill activates, derive a kebab-case slug from the task at hand — e.
 
 ### File handling
 
-- If `<project-root>/.claude/manifest/<task-slug>.md` does not exist: `mkdir -p .claude/manifest`, then Write the file with the full 4-section Manifest content.
+- If `<project-root>/docs/manifest/<task-slug>.md` does not exist: `mkdir -p docs/manifest` at the project root, then Write the file with the full 4-section Manifest content.
 - If it exists: update it in place. The same task always maps to the same file — don't create a parallel copy with a slightly-different slug.
 - Don't ask the user to run a helper command first. The skill is the helper.
 
