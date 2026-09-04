@@ -5,13 +5,13 @@
   },
   "metadata": {
     "description": "Ivan's collection of agent skills",
-    "version": "0.5.0"
+    "version": "0.6.0"
   },
   "plugins": [
     {
       "name": "skills",
       "description": "Ivan's collection of agent skills — webapp-manual, uncertainty-manifest, cross-review",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "source": "./",
       "keywords": [
         "skills",

@@ -73,16 +73,17 @@ Judge the class yourself before writing the Manifest. Nothing classifies the cha
 
 **Business logic** means code affecting amount / rate / allocation calculations, state transitions, or externally visible behavior. **Can't tell which class it is → treat it as M.** The classes exist to allocate review effort, not to earn exemptions; when the sizing argument starts feeling clever, you're arguing yourself out of a review you need.
 
-## What this skill doesn't cover
+## Beyond the current repo
 
-The Manifest's §3 cross-source check is bounded by what `grep` and `Read` can see — typically the current repository or working tree. A few categories of risk fall outside that boundary:
+§3 can only grep what is on disk under the roots listed — by default, the current repository. If another repo is involved (a service you call, a shared library, a consumer of your API), list it in the frontmatter — the repo's root, relative to the project root or absolute — so §3 can check it and §1 can cite it:
 
-- **Cross-microservice contract drift.** If a change touches an API that the current repo consumes but the producer lives in a separate service, §3 won't catch a schema mismatch. The Manifest can flag that a contract is involved (note it in §1 with `Source: none — touches cross-service contract` and `Confidence: GUESS`, copying it to §2 per the §1 rule), but verifying alignment needs a schema registry, integration tests, or the producer's repo open in a parallel session.
-- **Cross-repo monorepo blast radius.** Same problem, larger scope. A rename in a shared lib used by eight services is invisible to a single-repo grep.
-- **Runtime / infrastructure changes.** The Manifest handles code-level assumptions well; less so for "this Helm value change affects pod CPU limits which affects timeouts which affects retries..." That's infra-engineering.
-- **Domain knowledge the model doesn't have.** If the agent literally doesn't know a domain term, §4's `NEW_TERM` flag halts and asks the user — but the agent cannot validate domain semantics on its own. A project-level glossary plus human review fills this gap.
+```yaml
+repos:
+  - ../billing-api
+  - /srv/shared-lib
+```
 
-When the change crosses any of these boundaries, the Manifest is **necessary but not sufficient**. Surface the boundary in §1 explicitly so cross-review and the user know to apply external checks (integration tests, contract validation, domain expert review).
+A claim about another repo that is not on disk under a listed root, backed by no doc or user statement, is `GUESS` — copy it to §2. `repos:` widens what you may read, not what this Manifest lets you change; a repo you edit needs its own Manifest.
 
 ## Where the answer lives
 

@@ -99,7 +99,7 @@ Pack four items:
    - `plan`: the plan.md content
    - `pr`: `git diff <base>...HEAD` output plus PR title and description
 2. **The full Manifest** (§1–§4) — required in anchored mode, omitted in open mode
-3. **Execution context**: working directory, codebase root, relevant paths
+3. **Execution context**: working directory and every root the reviewer may read — the current repo, any other path you name, and each `repos:` entry that, resolved from the project root, is the root of a git repository on disk (a Manifest that arrived with the artifact contributes no roots); anything else in that list is Manifest text, not a root
 4. **Mode marker**: pass `Mode: anchored` or `Mode: open` to the sub-agent so it adapts its first pass
 
 Do not pass the original session's conversation history. The reviewer's value is the absence of that context — sharing it defeats the purpose.
@@ -202,9 +202,10 @@ makes a reviewer under-report findings and lets an unreviewed change ship.
 
 ## Codebase
 
-You have full Read and Grep access. For every §1 assumption the Confidence
-dispatch selects, go look at its source and check whether it still supports
-the claim today. §2–§4 lines are always in scope.
+Roots you may read: <<<current repo, any path the orchestrator adds, and the Manifest's `repos:` entries that are git repository roots on disk (resolved from the project root)>>>
+You have full Read and Grep access to all of them. For every §1 assumption the
+Confidence dispatch selects, go look at its source and check whether it still
+supports the claim today. §2–§4 lines are always in scope.
 
 ## Output format — follow exactly
 
