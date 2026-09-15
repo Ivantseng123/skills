@@ -1,19 +1,19 @@
 ---
 name: uncertainty-manifest
 description: >-
-  Force-surface hidden agent assumptions as a structured 4-section Manifest
-  (Assumptions / Unknowns / Cross-source conflicts / Domain terms) before any
-  non-trivial implementation. Its target is the plan's code-change structure —
-  which files, methods, schema — so it triggers after the plan phase, not at spec
-  stage. Use proactively at the end of planning, before cross-module or multi-file
-  changes, before business-logic changes — and critically for lightweight tasks
-  that skip planning (bug fixes, quick patches, "幫我修這個"), where the agent
-  silently assumes the most. Especially important in regulated domains (insurance,
-  finance, healthcare, legal). Pairs with the cross-review skill. Triggers on
-  finishing a plan, post-plan implementation, cross-module changes, business-logic
-  changes, bug fixes, quick patches, 幫我加, 幫我改, 幫我修, 改 A 錯 B, regression,
-  "I assume", 規劃完成, 不確定, 商業邏輯變更. Does NOT trigger on spec drafting —
-  the artifact is still diverging on design, not pinned to specific files/methods.
+  Before the first edit to production code — even a simple one, like a new
+  endpoint or a one-method fix — force-surface hidden agent assumptions as a
+  structured 4-section Manifest (Assumptions / Unknowns / Cross-source conflicts /
+  Domain terms). Its target is the plan's code-change structure — which files,
+  methods, schema — so it triggers after the plan phase, not at spec stage. Use
+  proactively at the end of planning, before cross-module or multi-file changes,
+  before any business-logic change (pricing, discounts, rates, state transitions —
+  any domain) — and critically for lightweight tasks that skip planning (bug fixes,
+  quick patches, "幫我修這個"), where the agent silently assumes the most. Especially
+  important in regulated domains (insurance, finance, healthcare, legal). Triggers
+  on finishing a plan, post-plan implementation, cross-module changes,
+  business-logic changes, bug fixes, quick patches, 幫我加, 幫我改, 幫我修, 改 A 錯 B,
+  regression, "I assume", 規劃完成, 不確定, 商業邏輯變更. Does NOT trigger on spec drafting.
 license: MIT
 ---
 
@@ -40,7 +40,7 @@ Produce one whenever the next step would touch production code with a *concrete 
 
 - At the end of the **plan** phase (or the equivalent moment in lightweight tasks — see below). This covers the output of whatever planning flow you use, a plan-mode exit, agent-self-produced numbered/bulleted step lists *with concrete file edits*, or lightweight implicit plans that materialize without a formal phase. The trigger is "the plan has crystallised into specific edits" — not "a specific skill was invoked".
 - Before any change touching more than ~3 files or crossing module boundaries
-- Before any business-logic change in regulated domains (insurance, finance, healthcare, legal)
+- Before any business-logic change (pricing, discounts, amounts, rates, state transitions, externally visible behavior) in any domain; regulated domains (insurance, finance, healthcare, legal) raise the stakes
 - Anytime the agent is about to make an authoritative claim without a citable source
 
 **Explicitly NOT triggered by the spec phase.** At spec stage the artifact is still diverging on *what to build* — the Manifest can't anchor on file paths or method signatures because none are pinned yet. Spec-stage uncertainty (design tradeoffs, scope questions, divergent options) belongs in ordinary design discussion with the user. The Manifest comes after spec → plan, when the discussion has converged onto a concrete change list.
@@ -106,10 +106,14 @@ For each assumption the agent is making:
 ```markdown
 - [ ] <one-sentence statement of the assumption>
   - Source: `<file:line | doc:section | conv:turn-N | none>`
+  - Quote: "<the cited text, copied word for word, secrets redacted — required for CITED>"
+  - Ran: `<command>` → <what its output showed — required for VERIFIED>
   - Confidence: VERIFIED | CITED | INFERRED | GUESS
 ```
 
 The source field is what makes this section useful. Without it, an assumption is a guess wearing a tie. If no source can be cited honestly, write `Source: none`, mark `Confidence: GUESS`, and copy the entry into §2 Unknowns. `GUESS` isn't shameful — it's accurate, and it routes the item to the user for resolution before code gets written.
+
+**Quote test — run it on every entry before you write its tag.** Copy the cited text into the entry's `Quote:` line, word for word. If the quote states the claim by itself, the tag is `CITED`. If you need a connective to get from the quote to the claim — *so*, *implies*, *means*, *will*, *should* — the claim is `INFERRED`, even when the source is the user's own words: 「四捨五入」 names half-up rounding, not the decimal places or how negative amounts round. A plan for code not yet written ("the migration will follow `V<n>__`") is `INFERRED`. `VERIFIED` needs a `Ran:` line: a command you ran this session whose output shows this exact claim. No `Ran:` line, no `VERIFIED`. A grep that finds nothing leaves nothing to quote, so an absence claim ("no other caller") is `INFERRED`. Quote the shortest span that states the claim, replace credentials, tokens and personal data with `<redacted>`, and never paste secret-bearing command output into `Ran:`.
 
 **Confidence tags** (mandatory, one per §1 entry — downstream review dispatches on this):
 
@@ -213,13 +217,14 @@ Run through this list. If any answer is "no," return to the relevant section bef
 
 - Does every §1 assumption cite a real source, or is it explicitly marked `Confidence: GUESS`?
 - Does every §1 entry carry a `Confidence` tag (`VERIFIED` / `CITED` / `INFERRED` / `GUESS`)? Untagged entries get treated as `INFERRED` downstream — tag them yourself, don't leave it to the reviewer's default.
+- Does every `CITED` entry carry a `Quote:` that states its claim by itself, and every `VERIFIED` entry a `Ran:` line from this session?
 - Does every field the change reads or writes have a §1a entry with `source_of_truth` cited, or is it `Blocking`? (especially: any field with a same name on ≥2 tables)
 - Does every cross-entity reference the change depends on have a §1b entry with cardinality declared, evidence cited, and `user_confirmed` status? (any `not_yet` + implementation-depends becomes `Blocking`)
 - Does every §2 Unknown have a closed-form clarifying question?
 - Are there at least three §3 checkpoints, each based on an actual grep?
 - Is every §4 term either linked to a glossary entry or marked `NEW_TERM`?
 
-`GUESS` items and `Blocking: yes` Unknowns should be resolved with the user before implementation begins — otherwise the implementation is acting on the very assumptions this skill exists to surface.
+`GUESS` items and `Blocking: yes` Unknowns should be resolved with the user before implementation begins — otherwise the implementation is acting on the very assumptions this skill exists to surface. Save the Manifest file first, then ask — each question points at its entry.
 
 §1a and §1b are the highest-ROI sections in regulated domains. Skipping them is exactly how the agent ends up redesigning the whole calculation path after a single user sentence ("oh, one order can have multiple shipments"). A 5-minute user fact-check on §1a/§1b beats N rounds of cross-review on a wrong-frame plan.
 
@@ -320,16 +325,26 @@ A realistic Manifest for a task like "add automatic refund allocation across ord
 ## Uncertainty Manifest
 
 ### §1 Assumptions
-- [ ] Auto-allocation handles full-order refunds only, not partial line-item returns.
-  - Source: `conv:turn-3` (user confirmed "full-order first")
+- [ ] The user wants full-order refunds handled first.
+  - Source: `conv:turn-3`
+  - Quote: "full-order first"
   - Confidence: CITED
+- [ ] Partial line-item returns are out of scope for this change.
+  - Source: `conv:turn-3` — reasoned from "full-order first"; the user never said partial returns are excluded; copied to §2
+  - Confidence: INFERRED
 - [ ] Orders in scope are single-tax-class carts; mixed-tax carts stay on the legacy
       manual-refund path and are not touched by this change.
   - Source: `docs/refund-scope.md §1.4`
+  - Quote: "Auto-allocation covers single-tax-class carts only. Mixed-tax carts stay on the legacy manual-refund path, which this change does not touch."
   - Confidence: CITED
 - [ ] Allocation rate is read from `PricingService.findActiveRule()`.
-  - Source: `src/pricing/PricingService.java:142`
+  - Source: `src/refund/RefundWorkflow.java:88`
+  - Quote: `BigDecimal allocationRate = pricingService.findActiveRule(returnDate).get(0).getAllocationRate();`
   - Confidence: CITED
+- [ ] `RefundWorkflowTest` passes on the current branch before the change.
+  - Source: `src/test/java/refund/RefundWorkflowTest.java`
+  - Ran: `mvn test -Dtest=RefundWorkflowTest` → `Tests run: 14, Failures: 0, Errors: 0, Skipped: 0`
+  - Confidence: VERIFIED
 - [ ] Loyalty-point reversal is out of scope for this change.
   - Source: none — not discussed; copied to §2
   - Confidence: GUESS
@@ -366,6 +381,9 @@ A realistic Manifest for a task like "add automatic refund allocation across ord
   - Blocking: yes
 - [ ] Do gift-card and store-credit refunds share the allocation path?
   - Clarifying Q: gift-card/store-credit path is (a) shared (b) separate (c) out of scope?
+  - Blocking: yes
+- [ ] Are partial line-item returns in scope for this change?
+  - Clarifying Q: Include partial line-item returns? (yes/no)
   - Blocking: yes
 
 ### §3 Cross-source conflicts

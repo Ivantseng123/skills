@@ -12,7 +12,7 @@ The workaround is to invert the requirement. Instead of waiting for the model to
 
 One markdown file per task, at `<project-root>/docs/manifest/<task-slug>.md` — a path tied to no particular agent, because the Manifest is a shared task artifact rather than agent configuration — in four mandatory sections (plus two sub-sections that turn out to catch the most expensive bugs):
 
-- **§1 Assumptions** — one line each, with a `Source` (`file:line`, doc section, the user's own words, or an honest `none`) and a **Confidence tag**: `VERIFIED` / `CITED` / `INFERRED` / `GUESS`. Reading the code caps at `CITED`; `VERIFIED` means you executed something that exercises the claim itself.
+- **§1 Assumptions** — one line each, with a `Source` (`file:line`, doc section, the user's own words, or an honest `none`) and a **Confidence tag**: `VERIFIED` / `CITED` / `INFERRED` / `GUESS`. Reading the code caps at `CITED`; `VERIFIED` means you executed something that exercises the claim itself. A `CITED` entry carries a `Quote:` copied word for word (credentials, tokens and personal data replaced with `<redacted>`) that states the claim on its own; a `VERIFIED` entry carries a `Ran:` line with the command and what it showed.
 - **§1a Data Lineage** — for every field the change reads or writes: which table or entity is the *source of truth*, who writes it, who reads it, and — the part that does the work — which **same-named fields on other tables were not used, and why**. Grep finds every table exposing a name; it never tells you which one is the truth.
 - **§1b Cardinality** — for every cross-entity reference: 1:1 / 1:N / N:M, the evidence, and whether a human confirmed it. Cardinality is a business fact, not a schema fact. `findOneBy*` might just mean "pick first of many."
 - **§2 Unknowns** — each with a *closed-form* question (yes/no or multiple choice) and a `Blocking` flag. Open-ended questions invite the agent to re-assume the answer.
@@ -27,7 +27,7 @@ The trigger is **"the plan has crystallised into specific edits"** — specific 
 
 - At the end of a planning phase, in whatever form your workflow has one.
 - Before any change touching more than ~3 files or crossing module boundaries.
-- Before any business-logic change in a regulated domain (insurance, finance, healthcare, legal).
+- Before any business-logic change — pricing, discounts, amounts, rates, state transitions — in any domain; regulated domains (insurance, finance, healthcare, legal) raise the stakes.
 - **Especially for lightweight tasks that skip planning entirely** — "幫我修這個 bug", "add an X". These look like they bypass planning, but the plan is happening silently on the way to the first edit. That's where the agent assumes the most and writes the least down.
 
 It does **not** trigger at spec stage. While the discussion is still "approach A or approach B", there are no file paths to anchor on — keep it a discussion, and come back once it converges.
