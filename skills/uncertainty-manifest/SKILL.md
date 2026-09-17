@@ -307,9 +307,9 @@ If the cross-review surfaces items that need user input or change the plan, upda
 
 ### Plan-stage critical findings — mandatory acknowledgement
 
-The advisory tier for plan-stage means the *workflow* doesn't block, but the *agent* must still acknowledge every 🔴 Critical finding. Silent dismissal of a critical finding is exactly the failure mode this clause exists to prevent.
+The advisory tier for plan-stage means the *workflow* doesn't block, but the *agent* must still acknowledge every 🔴 Critical finding that survives cross-review's Step 4 Critical gate. Silent dismissal of a critical finding is exactly the failure mode this clause exists to prevent.
 
-If the plan-stage cross-review report contains any 🔴 Critical item, before any production-code Write / Edit / MultiEdit / NotebookEdit:
+If the plan-stage cross-review report contains any 🔴 Critical item that survives that gate (a Critical the gate demoted stays in the pasted report, but counts as a Major and does not trigger this clause), before any production-code Write / Edit / MultiEdit / NotebookEdit:
 
 1. **Update the Manifest** to incorporate or refute the critical finding — don't silently ignore.
 2. **Report each critical finding back to the user** with your decision (absorb / pushback / defer) and rationale.

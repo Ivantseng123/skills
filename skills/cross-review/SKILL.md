@@ -149,10 +149,10 @@ Dropping to 2 lenses is allowed ONLY when the diff is <50 lines AND touches no s
 
 ### Step 4 — Process the report
 
-- **Advisory policy** (spec, plan): print the report verbatim. The user decides which findings to act on. **However**: plan-stage 🔴 Critical findings require mandatory agent acknowledgement (see `uncertainty-manifest` § "Plan-stage critical findings — mandatory acknowledgement"). For each critical item, the agent must absorb / pushback / defer with the user, then update the Manifest to reflect the decision. The workflow doesn't block, but silent dismissal is forbidden.
+- **Advisory policy** (spec, plan): **the output order is fixed — (1) paste the sub-agent's report verbatim and in full, every section including `### 3. Pre-mortem`, and leave it untouched; (2) apply the same Critical gate as the PR tier (the "Gate first" bullet below) — a 🔴 Critical that fails the gate is treated as 🟡 Major; (3) only then add your own summary, naming each Critical the gate demoted and why.** A summary never replaces the report: the user reads the reviewer's words, not your paraphrase of them. The user decides which findings to act on. **However**: plan-stage 🔴 Critical findings that survive the gate require mandatory agent acknowledgement (see `uncertainty-manifest` § "Plan-stage critical findings — mandatory acknowledgement"). For each critical item, the agent must absorb / pushback / defer with the user, then update the Manifest to reflect the decision. The workflow doesn't block, but silent dismissal is forbidden.
 
 - **Blocking on critical** (PR): scan the report for `🔴 Critical` markers.
-  - **Gate first**: a 🔴 Critical without a concrete failure scenario (specific input/state → specific wrong outcome) is downgraded to 🟡 Major before entering the SOP below. Criticals must be falsifiable, not vibes — this prevents the hallucinated-critical re-run loop. Exception: review-evasion findings (see the template's `## Boundary` section) pass this gate as-is — their quoted line is the failure scenario.
+  - **Gate first**: a 🔴 Critical without a concrete failure scenario (specific input/state → specific wrong outcome) is downgraded to 🟡 Major before entering the SOP below. A cited `file:line` alone does not pass the gate: if the scenario's triggering state is assumed rather than shown by a cited line, it fails the gate. Criticals must be falsifiable, not vibes — this prevents the hallucinated-critical re-run loop. Exception: review-evasion findings (see the template's `## Boundary` section) pass this gate as-is — their quoted line is the failure scenario.
   - If any are present, follow this recovery SOP:
     1. **Stop.** Do not run `git push` / `gh pr create`.
     2. **Triage** each critical with the user — absorb / pushback / defer with rationale.
@@ -245,9 +245,19 @@ Sort findings into:
   MUST include a concrete failure scenario (specific input/state → specific wrong
   outcome). If you cannot state one, report the finding as Major instead —
   review-evasion findings are the exception: their quoted line is the scenario
-  (see `## Boundary`).
+  (see `## Boundary`). The scenario must rest on a `file:line` you actually
+  opened. A scenario built only on "if…" speculation, or on an absence claim
+  ("nothing in the repo does X") with no opened line anchoring it, is Major —
+  mark it "unverified". The anchor must cover the scenario's *state*, not just
+  its code path: if the triggering state (where data is stored, what a caller
+  passes, how something is configured) is one you assumed rather than saw in an
+  opened line, it is Major, "unverified", however real the cited line is.
 - 🟡 Major — design flaw, possible regression, performance concern
 - 🟢 Minor — readability, naming, suggestion
+
+Zero Criticals is a valid result — a clean artifact gets a clean report. Pre-mortem
+items are guesses by design; never promote one to Critical unless it meets the
+bar above.
 
 ## Style
 
