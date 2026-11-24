@@ -300,8 +300,8 @@ Writing the Manifest is **not** the last step of planning. Immediately after the
 
 - **Why** — The Manifest captures the agent's *own* model of the world. Cross-review is what tests that model against the codebase with fresh eyes. Without it, the Manifest is a self-satisfied checklist that nobody challenges.
 - **How** — Spawn a sub-agent with the artifact (the plan/spec content) plus the Manifest file. See the `cross-review` skill for the exact prompt template and procedure; this skill just triggers it.
-- **Tier** — At plan stage the review is **advisory** — present the report, let the user decide what to act on, do not block implementation on it. (PR stage is different — that one blocks on critical.)
-- **Don't ask first** — Don't prompt the user "should I run cross-review?" That's ceremony and predictable bikeshedding. Run it, present the report, then let the user respond.
+- **Tier** — At plan stage the review is **advisory** — hand the result over (cross-review Step 5), let the user decide what to act on, do not block implementation on it. (PR stage is different — that one blocks on critical.)
+- **Don't ask first** — Don't prompt the user "should I run cross-review?" That's ceremony and predictable bikeshedding. Run it, hand the result over, then let the user respond.
 
 If the cross-review surfaces items that need user input or change the plan, update the Manifest file in place to reflect the new understanding before implementation begins.
 
@@ -309,11 +309,13 @@ If the cross-review surfaces items that need user input or change the plan, upda
 
 The advisory tier for plan-stage means the *workflow* doesn't block, but the *agent* must still acknowledge every 🔴 Critical finding that survives cross-review's Step 4 Critical gate. Silent dismissal of a critical finding is exactly the failure mode this clause exists to prevent.
 
-If the plan-stage cross-review report contains any 🔴 Critical item that survives that gate (a Critical the gate demoted stays in the pasted report, but counts as a Major and does not trigger this clause), before any production-code Write / Edit / MultiEdit / NotebookEdit:
+If the plan-stage cross-review report contains any 🔴 Critical item that survives that gate, before any production-code Write / Edit / MultiEdit / NotebookEdit:
 
 1. **Update the Manifest** to incorporate or refute the critical finding — don't silently ignore.
 2. **Report each critical finding back to the user** with your decision (absorb / pushback / defer) and rationale.
 3. **Wait** for user response before proceeding to implementation.
+
+A Critical the gate demoted counts as a Major and does not trigger this clause.
 
 "This is just advisory" is not a license to drop a critical finding on the floor. Advisory means the workflow doesn't gate; it does not mean the agent ignores.
 
