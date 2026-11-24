@@ -32,7 +32,9 @@ S-class changes (≤2 files, ≤20 lines, no business logic) skip the plan tier;
 
 A report in a fixed shape: a per-item verdict on every Manifest line (✅ Verified / ⚠️ Stale / ❌ Wrong / 🆕 Missing / ⏭️ Skipped, each cited to `file:line` except skipped items), hidden conflicts the reviewer found on its own, a three-scenario pre-mortem, and severity-sorted findings.
 
-Most hosts show the user little or nothing of a sub-agent's output, so the orchestrating agent hands the result over itself: counts, verdict and the problem lines in the conversation, the full report in a file under `docs/manifest/reviews/`.
+The reviewer writes its full report to `docs/manifest/reviews/` and returns a short hand-over — a table of its 🔴 and 🟡 findings, the 🟢 count, and every item that needs your call — which the orchestrating agent passes on unchanged.
+
+`evals/ab/` holds the A/B scenario used to compare versions of this skill on Claude Code and Codex.
 
 Two mechanics keep the report honest. **Confidence-tier dispatch**: `GUESS` and `INFERRED` claims get individually attacked, `CITED` claims get spot-checked, `VERIFIED` claims get skipped — the verification budget goes where the uncertainty is. **Falsifiable Criticals**: a 🔴 Critical that can't name a concrete failure scenario (specific input or state → specific wrong outcome) is auto-demoted to 🟡 Major — and so is one whose triggering state was assumed rather than seen in an opened `file:line`, however real the cited line is. The gate applies at the spec and plan tiers as well as the PR tier, and zero Criticals is a valid result. This is what stops the hallucinated-critical → fix → re-run → new hallucination loop.
 
